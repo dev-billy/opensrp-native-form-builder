@@ -92,6 +92,25 @@ function createDataPoint(question, index) {
       index: index,
     });
   }
+  console.log(question.type);
+  if (question.type === "toaster_notes") {
+    console.log("HEre");
+    dataPoint.push({
+      key: 8,
+      type: "Notification Text",
+      currentValue: question.text,
+      valueEdited: "text",
+      index: index,
+    });
+    question.toaster_info_text &&
+      dataPoint.push({
+        key: 9,
+        type: "Notification more info text",
+        currentValue: question.toaster_info_text,
+        valueEdited: "toaster_info_text",
+        index: index,
+      });
+  }
   return dataPoint;
 }
 const { Panel } = Collapse;
