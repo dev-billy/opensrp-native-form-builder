@@ -21,6 +21,9 @@ function updateMultipleValues(
   if (valueEdited === "values") {
     questionsTranslated[index][valueEdited][valueAt] = value;
   }
+  if (valueEdited === "options") {
+    questionsTranslated[index][valueEdited][valueAt]["text"] = value;
+  }
 }
 function createDataPoint(question, index) {
   let dataPoint = [];
@@ -73,12 +76,28 @@ function createDataPoint(question, index) {
       index: index,
     });
   }
+  if (question.type === "check_box" || question.type === "native_radio") {
+    dataPoint.push({
+      key: 6,
+      type: "Label",
+      currentValue: question.label,
+      valueEdited: "label",
+      index: index,
+    });
+    dataPoint.push({
+      key: 7,
+      type: "Select Options",
+      currentValue: [question.options],
+      valueEdited: "options",
+      index: index,
+    });
+  }
   return dataPoint;
 }
 const { Panel } = Collapse;
 const QuestionField = ({ questions, questionsTranslated, handleUpdate }) => {
   function handleChange(value, index, valueEdited, indexForMultiple) {
-    if (valueEdited !== "values") {
+    if (valueEdited !== "values" && valueEdited !== "options") {
       updateSingleValue(valueEdited, questionsTranslated, index, value);
     } else {
       updateMultipleValues(
@@ -108,7 +127,9 @@ const QuestionField = ({ questions, questionsTranslated, handleUpdate }) => {
             {Array.isArray(record.currentValue) ? (
               <ol>
                 {record.currentValue[0].map((item, id) => (
-                  <li key={id}>{item}</li>
+                  <li key={id}>
+                    {record.valueEdited === "values" ? item : item.text}
+                  </li>
                 ))}
               </ol>
             ) : (
@@ -127,19 +148,21 @@ const QuestionField = ({ questions, questionsTranslated, handleUpdate }) => {
           <>
             {Array.isArray(record.currentValue) ? (
               <ol>
-                {record.currentValue[0].map((item, id) => (
-                  <li key={id}>
-                    <Col span={5}>
+                {record.currentValue[0].map((item, itemId) => (
+                  <li key={itemId}>
+                    <Col span={12}>
                       <Input
                         type="text"
                         name={record.type}
-                        placeholder={item}
+                        placeholder={
+                          record.valueEdited === "values" ? item : item.text
+                        }
                         onChange={(e) =>
                           handleChange(
                             e.target.value,
                             record.index,
                             record.valueEdited,
-                            id
+                            itemId
                           )
                         }
                       />
