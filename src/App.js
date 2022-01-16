@@ -1,9 +1,10 @@
 import Layout from "./layout";
-import Home from "./pages/Home";
+import TranslateForm from "./pages/TranslateForm";
+
 function App() {
   return (
     <Layout>
-      <Home />
+      <TranslateForm />
     </Layout>
   );
 }
