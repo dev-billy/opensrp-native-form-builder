@@ -7,7 +7,7 @@ const styles = {
 
 const contentStyles = {
   padding: "1.5em 2em",
-  minHeight: "77vh",
+  minHeight: "90vh",
 };
 
 const Layout = ({ children }) => {
