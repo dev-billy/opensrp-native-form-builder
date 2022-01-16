@@ -1,6 +1,6 @@
 import { Collapse, Table, Input, Col } from "antd";
 
-function updateValue(valueEdited, questionsTranslated, index, value) {
+function updateSingleValue(valueEdited, questionsTranslated, index, value) {
   if (valueEdited.startsWith("v_regex")) {
     questionsTranslated[index]["v_regex"]["err"] = value;
   } else if (valueEdited.startsWith("v_required")) {
@@ -9,6 +9,17 @@ function updateValue(valueEdited, questionsTranslated, index, value) {
     questionsTranslated[index]["v_numeric"]["err"] = value;
   } else {
     questionsTranslated[index][valueEdited] = value;
+  }
+}
+function updateMultipleValues(
+  valueEdited,
+  questionsTranslated,
+  index,
+  value,
+  valueAt
+) {
+  if (valueEdited === "values") {
+    questionsTranslated[index][valueEdited][valueAt] = value;
   }
 }
 function createDataPoint(question, index) {
@@ -58,6 +69,7 @@ function createDataPoint(question, index) {
       key: 5,
       type: "Drop down values",
       currentValue: [question.values],
+      valueEdited: "values",
       index: index,
     });
   }
@@ -65,8 +77,18 @@ function createDataPoint(question, index) {
 }
 const { Panel } = Collapse;
 const QuestionField = ({ questions, questionsTranslated, handleUpdate }) => {
-  function handleChange(value, index, valueEdited) {
-    updateValue(valueEdited, questionsTranslated, index, value);
+  function handleChange(value, index, valueEdited, indexForMultiple) {
+    if (valueEdited !== "values") {
+      updateSingleValue(valueEdited, questionsTranslated, index, value);
+    } else {
+      updateMultipleValues(
+        valueEdited,
+        questionsTranslated,
+        index,
+        value,
+        indexForMultiple
+      );
+    }
     handleUpdate([...questionsTranslated]);
   }
 
@@ -106,18 +128,18 @@ const QuestionField = ({ questions, questionsTranslated, handleUpdate }) => {
             {Array.isArray(record.currentValue) ? (
               <ol>
                 {record.currentValue[0].map((item, id) => (
-                  <li>
+                  <li key={id}>
                     <Col span={5}>
                       <Input
                         type="text"
-                        key={id}
                         name={record.type}
                         placeholder={item}
                         onChange={(e) =>
                           handleChange(
                             e.target.value,
                             record.index,
-                            record.valueEdited
+                            record.valueEdited,
+                            id
                           )
                         }
                       />
@@ -130,7 +152,6 @@ const QuestionField = ({ questions, questionsTranslated, handleUpdate }) => {
               <Input
                 type="text"
                 name={record.type}
-                value={questionsTranslated[record.index][record.valueEdited]}
                 placeholder={record.currentValue}
                 onChange={(e) =>
                   handleChange(e.target.value, record.index, record.valueEdited)
