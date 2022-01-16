@@ -31,7 +31,6 @@ function createDataPoint(question, index) {
     dataPoint.push({
       key: 1,
       currentValue: `${question.hint}`,
-      question: { ...question },
       type: "Hint",
       valueEdited: "hint",
       index: index,
@@ -41,7 +40,6 @@ function createDataPoint(question, index) {
     dataPoint.push({
       key: 2,
       currentValue: `${question.v_required.err}`,
-      question: { ...question },
       type: "Required Message",
       valueEdited: "v_required.err",
       index: index,
@@ -51,7 +49,6 @@ function createDataPoint(question, index) {
     dataPoint.push({
       key: 3,
       currentValue: `${question.v_numeric.err}`,
-      question: { ...question },
       type: "Invalid Number input message",
       valueEdited: "v_numeric.err",
       index: index,
@@ -61,7 +58,6 @@ function createDataPoint(question, index) {
     dataPoint.push({
       key: 4,
       currentValue: `${question.v_regex.err}`,
-      question: { ...question },
       type: "Invalid input message",
       valueEdited: "v_regex.err",
       index: index,
@@ -92,9 +88,7 @@ function createDataPoint(question, index) {
       index: index,
     });
   }
-  console.log(question.type);
   if (question.type === "toaster_notes") {
-    console.log("HEre");
     dataPoint.push({
       key: 8,
       type: "Notification Text",
