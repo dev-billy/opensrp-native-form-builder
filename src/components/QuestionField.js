@@ -23,7 +23,7 @@ const QuestionField = ({ questions, questionsTranslated, handleUpdate }) => {
         indexForMultiple
       );
     }
-    handleUpdate([...questionsTranslated]);
+    handleUpdate(questionsTranslated);
   }
   const columns = TableColumns().map((col) => {
     if (!col.editable) {

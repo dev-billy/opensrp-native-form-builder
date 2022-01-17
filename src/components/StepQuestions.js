@@ -2,28 +2,29 @@ import QuestionField from "./QuestionField";
 import { useState, useEffect } from "react";
 import ReactJson from "react-json-view";
 
-const StepQuestions = ({ questions }) => {
-  const [questionList, setQuestionList] = useState(
-    JSON.parse(JSON.stringify(questions))
-  );
+const StepQuestions = ({
+  questions,
+  questionTranslated,
+  stepTransIndex,
+  handleChangeUpdate,
+}) => {
   const [receivedQuestions, setRecievedQuestions] = useState(questions);
 
   useEffect(() => {
     setRecievedQuestions(questions);
-    setQuestionList(JSON.parse(JSON.stringify(questions)));
   }, [questions]);
 
   function handleUpdate(updatedQuestionsList) {
-    setQuestionList(updatedQuestionsList);
+    handleChangeUpdate(stepTransIndex, updatedQuestionsList);
   }
   return (
     <section>
       <QuestionField
         questions={receivedQuestions}
         handleUpdate={handleUpdate}
-        questionsTranslated={questionList}
+        questionsTranslated={questionTranslated}
       />
-      <ReactJson src={JSON.parse(JSON.stringify(questionList))} />
+      <ReactJson src={JSON.parse(JSON.stringify(questionTranslated))} />
     </section>
   );
 };
