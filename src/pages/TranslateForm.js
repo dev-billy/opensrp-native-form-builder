@@ -6,6 +6,7 @@ const { TabPane } = Tabs;
 
 const TranslateForm = () => {
   const [questionForm, setQuestionForm] = useState({});
+  const [showUpload, setShowUpload] = useState(true);
   const [formName, setFormName] = useState("");
   const steps = [];
   if (questionForm !== {}) {
@@ -16,6 +17,7 @@ const TranslateForm = () => {
   }
   const handleChange = (e) => {
     setFormName(e.target.files[0].name);
+    setShowUpload(false);
     const fileReader = new FileReader();
     fileReader.readAsText(e.target.files[0], "UTF-8");
     fileReader.onload = (e) => {
@@ -25,12 +27,14 @@ const TranslateForm = () => {
   return (
     <section>
       {formName !== "" && <h2>Form Name: {formName}</h2>}
-      <input
-        type="file"
-        accept="application/JSON"
-        name="translateFile"
-        onChange={handleChange}
-      />
+      {showUpload && (
+        <input
+          type="file"
+          accept="application/JSON"
+          name="translateFile"
+          onChange={handleChange}
+        />
+      )}
       <Tabs>
         {steps !== null &&
           steps.map((questions, idx) => (
