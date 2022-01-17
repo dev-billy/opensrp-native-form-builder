@@ -1,5 +1,6 @@
 import { Collapse, Table } from "antd";
-
+import { useState, useEffect, useRef } from "react";
+import EditableCell from "./EditableCell";
 import TableColumns from "../utils/TranslateTable/columns";
 import {
   updateMultipleValues,
@@ -9,6 +10,7 @@ import {
 
 const { Panel } = Collapse;
 const QuestionField = ({ questions, questionsTranslated, handleUpdate }) => {
+  const [dataSource, setDataSource] = useState([]);
   function handleChange(value, index, valueEdited, indexForMultiple) {
     if (valueEdited !== "values" && valueEdited !== "options") {
       updateSingleValue(valueEdited, questionsTranslated, index, value);
@@ -23,7 +25,38 @@ const QuestionField = ({ questions, questionsTranslated, handleUpdate }) => {
     }
     handleUpdate([...questionsTranslated]);
   }
-  const columns = TableColumns(handleChange);
+  const columns = TableColumns().map((col) => {
+    if (!col.editable) {
+      return col;
+    }
+    return {
+      ...col,
+      onCell: (record) => ({
+        record,
+        editable: col.editable,
+        dataIndex: col.dataIndex,
+        title: col.title,
+        handleChange: handleChange,
+      }),
+    };
+  });
+  let dataPoint = useRef([]);
+  const components = {
+    body: {
+      cell: EditableCell,
+    },
+  };
+
+  useEffect(() => {
+    questions.forEach((question, index) => {
+      dataPoint.current.push(createDataPoint(question, index));
+    });
+  }, [questions]);
+
+  useEffect(() => {
+    setDataSource(dataPoint.current);
+  }, []);
+
   return (
     <Collapse>
       {questions.map((question, index) =>
@@ -32,8 +65,9 @@ const QuestionField = ({ questions, questionsTranslated, handleUpdate }) => {
         ) : (
           <Panel header={question.key} key={index}>
             <Table
+              components={components}
               columns={columns}
-              dataSource={createDataPoint(question, index)}
+              dataSource={dataSource[index]}
             />
           </Panel>
         )

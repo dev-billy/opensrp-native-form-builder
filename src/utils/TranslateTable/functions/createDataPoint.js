@@ -1,4 +1,5 @@
 function createDataPoint(question, index) {
+  console.log("called");
   let dataPoint = [];
   if (question.hint !== undefined) {
     dataPoint.push({
