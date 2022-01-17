@@ -79,6 +79,34 @@ function createDataPoint(question, index) {
         index: index,
       });
   }
+  if (question.v_numeric_integer !== undefined) {
+    dataPoint.push({
+      key: 10,
+      currentValue: `${question.v_numeric_integer.err}`,
+      type: "Invalid Integer Input Message",
+      valueEdited: "v_numeric_integer.err",
+      index: index,
+    });
+  }
+  if (question.v_min !== undefined) {
+    dataPoint.push({
+      key: 11,
+      currentValue: `${question.v_min.err}`,
+      type: "Minimum allowed error message",
+      valueEdited: "v_min.err",
+      index: index,
+    });
+  }
+  if (question.v_max !== undefined) {
+    dataPoint.push({
+      key: 12,
+      currentValue: `${question.v_max.err}`,
+      type: "Maximum allowed error message",
+      valueEdited: "v_max.err",
+      index: index,
+    });
+  }
+
   return dataPoint;
 }
 
