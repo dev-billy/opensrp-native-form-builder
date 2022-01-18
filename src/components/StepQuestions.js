@@ -1,6 +1,6 @@
 import QuestionField from "./QuestionField";
 import { useState, useEffect } from "react";
-import ReactJson from "react-json-view";
+//import ReactJson from "react-json-view";
 
 const StepQuestions = ({
   questions,
@@ -24,7 +24,7 @@ const StepQuestions = ({
         handleUpdate={handleUpdate}
         questionsTranslated={questionTranslated}
       />
-      <ReactJson src={JSON.parse(JSON.stringify(questionTranslated))} />
+      {/* <ReactJson src={JSON.parse(JSON.stringify(questionTranslated))} /> */}
     </section>
   );
 };
