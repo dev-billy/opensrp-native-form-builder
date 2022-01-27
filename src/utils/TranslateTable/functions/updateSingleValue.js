@@ -9,6 +9,8 @@ function updateSingleValue(valueEdited, questionsTranslated, index, value) {
     questionsTranslated[index]["v_min"]["err"] = value;
   } else if (valueEdited.startsWith("v_max")) {
     questionsTranslated[index]["v_max"]["err"] = value;
+  } else if (valueEdited.startsWith("v_numeric_integer")) {
+    questionsTranslated[index]["v_numeric_integer"]["err"] = value;
   } else {
     questionsTranslated[index][valueEdited] = value;
   }
